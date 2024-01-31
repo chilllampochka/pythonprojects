@@ -45,7 +45,6 @@ class Local_Player:
         self.y+=self.y_speed 
      
     def change_speed(self,vektor):
-        print(vektor.split(","))
         vektor=list(map(float,vektor.split(",")))
         if vektor[0]==0 and vektor[1]==0:
             self.x_speed=self.y_speed=0
@@ -85,6 +84,21 @@ while run:
             players[id].change_speed(data)
         except:
             pass  
+    
+    #видимость игроков
+    visible_bacteries={}
+    for id in list(players):
+        visible_bacteries[id]=[]
+        pairs=list(players.items())
+        for i in range(len(pairs)):
+            for j in range(i+1, len(pairs)):
+                p1=pairs[i][1]
+                p2=pairs[j][1]
+                dist_x=p1.x-p2.x
+                dist_y=p1.y-p2.y
+                
+                if
+                
     
     for id in list(players):
         try:
