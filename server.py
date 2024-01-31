@@ -66,11 +66,11 @@ while run:
         new_socket,addr=main_socket.accept()
         print(f"Подключился {addr}")
         new_socket.setblocking(False)
-        #login=new_socket.recv(1024).decode()
-        #ogin=login.split(',')
+        login=new_socket.recv(1024).decode()
+        login=login.split(',')
         addr=f"({addr[0]},{addr[1]})"
         player=Players("abc",addr)
-        #player.name, player.color=login
+        player.name, player.color=login
         session.merge(player)
         session.commit()
         data=session.query(Players).filter(Players.addres==addr).first()
@@ -82,9 +82,7 @@ while run:
     for id in list(players):
         try:
             data=players[id].sock.recv(1024).decode()
-            print(f"Получил {data}")
             players[id].change_speed(data)
-            print("aaaa")
         except:
             pass  
     

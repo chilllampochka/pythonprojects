@@ -59,7 +59,7 @@ sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock.setsockopt(socket.IPPROTO_TCP,socket.TCP_NODELAY,1)
 sock.connect(("localhost",10000))
 
-#sock.send(f'{name},{color}'.encode())
+sock.send(f'{name},{color}'.encode())
 
 CC=(width//2,height//2)           
 radius=50
@@ -80,7 +80,6 @@ while run:
             old=vektor
             sock.send(f"{vektor[0]},{vektor[1]}".encode()) 
     data=sock.recv(1024).decode()
-    print(f"Получил {data}")
     screen.fill('gray')
     pygame.draw.circle(screen, color, CC, radius)
     pygame.display.update()
