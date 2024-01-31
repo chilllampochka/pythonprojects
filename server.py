@@ -36,6 +36,9 @@ class Local_Player:
         self.abs_speed=1
         self.x_speed=0
         self.y_speed=0
+        self.color='red'
+        self.w_vision=800
+        self.h_vision=600
         
     def update(self):
         self.x+=self.x_speed
@@ -63,8 +66,11 @@ while run:
         new_socket,addr=main_socket.accept()
         print(f"Подключился {addr}")
         new_socket.setblocking(False)
+        #login=new_socket.recv(1024).decode()
+        #ogin=login.split(',')
         addr=f"({addr[0]},{addr[1]})"
         player=Players("abc",addr)
+        #player.name, player.color=login
         session.merge(player)
         session.commit()
         data=session.query(Players).filter(Players.addres==addr).first()
@@ -98,7 +104,7 @@ while run:
         x = player.x * WIDTH_SERVER // WIDTH_ROOM
         y = player.y * HEIGHT_SERVER // HEIGHT_ROOM
         size = player.size * WIDTH_SERVER // WIDTH_ROOM
-        pygame.draw.circle(screen, "yellow2", (x, y), size)
+        pygame.draw.circle(screen, "yellow", (x, y), size)
         
     for id in players:
         player = players[id]

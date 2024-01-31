@@ -14,6 +14,9 @@ class Players(sqlalchemy_base):
     abs_speed=sqlalchemy.Column(sqlalchemy.Integer,default=1)
     speed_x=sqlalchemy.Column(sqlalchemy.Integer,default=0)
     speed_y=sqlalchemy.Column(sqlalchemy.Integer,default=0)
+    color=sqlalchemy.Column(sqlalchemy.String(250),default='red')
+    w_vision=sqlalchemy.Column(sqlalchemy.Integer,default=800)
+    h_vision=sqlalchemy.Column(sqlalchemy.Integer,default=600)
     def __init__(self,name,addr):
         self.name=name
         self.addres=addr
