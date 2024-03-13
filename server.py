@@ -92,14 +92,29 @@ while run:
         pairs=list(players.items())
         for i in range(len(pairs)):
             for j in range(i+1, len(pairs)):
-                p1=pairs[i][1]
-                p2=pairs[j][1]
-                dist_x=p1.x-p2.x
-                dist_y=p1.y-p2.y
+                p_1=pairs[i][1]
+                p_2=pairs[j][1]
+                dist_x=p_1.x-p_2.x
+                dist_y=p_1.y-p_2.y
                 
-                if
-                
-    
+                if abs(dist_x) <= p_1.w_vision // 2 + p_2.size and abs(dist_y) <= p_1.h_vision // 2 + p_2.size:
+                    distance=math.sqrt(dist_x**2+dist_y**2)
+                    if distance<=p_1.size and p_1.size>p_2.size*1.1:
+                        p_1.size=math.sqrt(p_1.size**2+p_2.size**2)
+                        p_2.size,p_2.speed_x,p_2.speed_y=0,0,0    
+                    if p_1.addres is not None:
+                        data=f"{round(dist_x)} {round(dist_y)} {round(p_2.size)} {p_2.color}"
+                        visibale_bacteries[p_1.id].append(data)
+                if abs(dist_x) <= p_2.w_vision // 2 + p_1.size and abs(dist_y) <= p_2.h_vision // 2 + p_1.size:
+                    distance=math.sqrt(dist_x**2+dist_y**2)
+                    if distance<=p_2.size and p_2.size>p_1.size*1.1:
+                        p_2.size=math.sqrt(p_2.size**2+p_1.size**2)
+                        p_1.size,p_1.speed_x,p_1.speed_y=0,0,0 
+                    if p_2.addres is not None:
+                        data=f"{round(-dist_x)} {round(-dist_y)} {round(p_1.size)} {p_1.color}"
+                        visibale_bacteries[p_2.id].append(data)
+
+                    
     for id in list(players):
         try:
             players[id].sock.send("Cъел".encode())

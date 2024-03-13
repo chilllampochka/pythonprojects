@@ -10,7 +10,8 @@ def global_init(db_file):
     global factory
     if factory:
         return
-    con=f'sqlite:///{db_file.strip()}?check_same_thread=False'
+   # con=f'sqlite:///{db_file.strip()}?check_same_thread=False'
+    con=f'postgresql+psycopg2://postgres:slava8162@localhost/agario'
     engine=sa.create_engine(con,echo=False)
     factory=orm.sessionmaker(bind=engine)
     from . import all_models
