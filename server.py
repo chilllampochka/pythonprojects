@@ -114,10 +114,15 @@ while run:
                         data=f"{round(-dist_x)} {round(-dist_y)} {round(p_1.size)} {p_1.color}"
                         visibale_bacteries[p_2.id].append(data)
 
+    #создаем ответ
+    for id in list(players):
+        visible_bacteries[id]=','.join(visible_bacteries[id])+'$'
                     
     for id in list(players):
         try:
-            players[id].sock.send("Cъел".encode())
+            print(visible_bacteries[id])
+            print(type(visible_bacteries[id]))
+            players[id].sock.send(visible_bacteries[id].encode())
         except:
             players[id].sock.close()
             del players[id]

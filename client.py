@@ -79,7 +79,8 @@ while run:
         if vektor!=old:
             old=vektor
             sock.send(f"{vektor[0]},{vektor[1]}".encode()) 
-    data=sock.recv(1024).decode()
+    data=sock.recv(1024).decode().replace('$', '')
+    data=data.split(',')
     screen.fill('gray')
     pygame.draw.circle(screen, color, CC, radius)
     pygame.display.update()
