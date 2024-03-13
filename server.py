@@ -21,7 +21,6 @@ screen=pygame.display.set_mode((WIDTH_SERVER,HEIGHT_SERVER))
 pygame.display.set_caption("Agario")
 clock=pygame.time.Clock()
 
-
 class Local_Player:
     def __init__(self,id,name,sock,addr):
         self.id=id
@@ -41,8 +40,24 @@ class Local_Player:
         self.h_vision=600
         
     def update(self):
-        self.x+=self.x_speed
-        self.y+=self.y_speed 
+        if self.x-self.size<=0:
+            if self.speed_x>=0:
+                self.x+=self.x_speed
+        elif self.x+self.size>=WIDTH_ROOM:
+            if self.speed_x<=0:
+                self.x+=self.x_speed
+        else:
+            self.x+=self.x_speed
+            
+        if self.y-self.size<=0:
+            if self.speed_y>=0:
+                self.y+=self.y_speed
+        elif self.y+self.size>=HEIGHT_ROOM:
+            if self.speed_y<=0:
+                self.y+=self.y_speed
+        else:
+            self.y+=self.y_speed
+        
      
     def change_speed(self,vektor):
         vektor=list(map(float,vektor.split(",")))
@@ -51,7 +66,36 @@ class Local_Player:
         else:
             vektor=vektor[0]*self.abs_speed,vektor[1]*self.abs_speed
             self.x_speed=vektor[0]
-            self.y_speed=vektor[1]         
+            self.y_speed=vektor[1]
+            
+    def load(self):
+        self.size = self.db.size
+        self.abs_speed = self.db.abs_speed
+        self.speed_x = self.db.speed_x
+        self.speed_y = self.db.speed_y
+        self.errors = self.db.errors
+        self.x = self.db.x
+        self.y = self.db.y
+        self.color = self.db.color
+        self.w_vision = self.db.w_vision
+        self.h_vision = self.db.h_vision
+        return self
+    
+    def sync(self):
+        self.db.size = self.size
+        self.db.abs_speed = self.abs_speed
+        self.db.speed_x = self.speed_x
+        self.db.speed_y = self.speed_y
+        self.db.errors = self.errors
+        self.db.x = self.x
+        self.db.y = self.y
+        self.db.color = self.color
+        self.db.w_vision = self.w_vision
+        self.db.h_vision = self.h_vision
+        session.merge(self.db)
+        session.commit()
+
+         
         
 players={}
 
@@ -73,7 +117,7 @@ while run:
         session.merge(player)
         session.commit()
         data=session.query(Players).filter(Players.addres==addr).first()
-        player=Local_Player(data.id,data.name,new_socket,addr)
+        player=Local_Player(data.id,data.name,new_socket,addr).load()
         players[data.id]=player
     except BlockingIOError:
         pass 
@@ -120,8 +164,6 @@ while run:
                     
     for id in list(players):
         try:
-            print(visible_bacteries[id])
-            print(type(visible_bacteries[id]))
             players[id].sock.send(visible_bacteries[id].encode())
         except:
             players[id].sock.close()
@@ -136,7 +178,7 @@ while run:
         x = player.x * WIDTH_SERVER // WIDTH_ROOM
         y = player.y * HEIGHT_SERVER // HEIGHT_ROOM
         size = player.size * WIDTH_SERVER // WIDTH_ROOM
-        pygame.draw.circle(screen, "yellow", (x, y), size)
+        pygame.draw.circle(screen, player.color, (x, y), size)
         
     for id in players:
         player = players[id]

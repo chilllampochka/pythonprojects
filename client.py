@@ -20,6 +20,16 @@ def login():
     else:
         tkinter.messagebox.showerror("Ошибка", "Ты не выбрал цвет или не ввёл имя!")
 
+def draw_bacteries(data: list[str]):
+    for num, bact in enumerate(data):
+        data = bact.split(" ")  # Разбиваем по пробелам подстроку одной бактерии
+        x = CC[0] + int(data[0])
+        y = CC[1] + int(data[1])
+        size = int(data[2])
+        color = data[3]
+        pygame.draw.circle(screen, color, (x, y), size)
+
+    
 name=''
 color=''
 root=tkinter.Tk()
@@ -83,6 +93,8 @@ while run:
     data=data.split(',')
     screen.fill('gray')
     pygame.draw.circle(screen, color, CC, radius)
+    if data!=['']:
+        draw_bacteries(data)
     pygame.display.update()
 
 pygame.quit()    
